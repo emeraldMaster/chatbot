@@ -26,6 +26,8 @@ class BarkCommand(Command):
 
 
 class CommandFactory(object):
+    REGISTERED_COMMANDS = Command.__subclasses__()
+
     @classmethod
     def build(cls, command: str, message: Message) -> Command:
         if command == 'bark':

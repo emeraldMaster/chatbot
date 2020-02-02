@@ -5,20 +5,20 @@ import os
 import uuid
 
 from messages import MessageFactory, Message
-from commands import CommandFactory, BarkCommand
+from commands import CommandFactory
 
 INBOUND_MESSAGES_DB = '{}/inbound'.format(os.getcwd())
 
 
 class Dispatcher(object):
-    SUPPORTED_COMMANDS = {cls.REACTS_TO: cls for cls in [BarkCommand]}
+    SUPPORTED_COMMANDS = [cls.REACTS_TO for cls in CommandFactory.REGISTERED_COMMANDS]
 
     def handle_command(self, command_name: str, param_json: str):
         if command_name == 'process':
             self._process_queue()
             return
 
-        if command_name not in self.SUPPORTED_COMMANDS.keys():
+        if command_name not in self.SUPPORTED_COMMANDS:
             raise AttributeError('Unsupported command')
 
         if param_json and param_json != '':
